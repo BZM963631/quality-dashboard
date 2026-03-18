@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年智能质检项目看板</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1a1a2e;
+            overflow-x: hidden;
+        }
+
+        /* 铺满全屏 */
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 2vh 3vw;
+            overflow: hidden;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 2vh;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            margin-bottom: 0.5vh;
+        }
+
+        .header .subtitle {
+            color: rgba(255,255,255,0.85);
+            font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+        }
+
+        /* 总项目概览 */
+        .overview-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5vw;
+            padding: 2vh 2vw;
+            margin-bottom: 2vh;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .overview-header {
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+            margin-bottom: 2vh;
+        }
+
+        .overview-header .icon {
+            width: clamp(35px, 3vw, 50px);
+            height: clamp(35px, 3vw, 50px);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 0.8vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: clamp(1rem, 1.5vw, 1.5rem);
+        }
+
+        .overview-header h2 {
+            font-size: clamp(1rem, 1.5vw, 1.4rem);
+            font-weight: 600;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5vw;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 1.5vh 1vw;
+            border-radius: 1vw;
+            text-align: center;
+        }
+
+        .stat-item .label {
+            color: #6c757d;
+            font-size: clamp(0.7rem, 1vw, 0.85rem);
+            margin-bottom: 0.8vh;
+        }
+
+        .stat-item .value {
+            font-size: clamp(1rem, 1.8vw, 1.6rem);
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1.3;
+        }
+
+        .stat-item .value .sub {
+            font-size: 0.75em;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* 子项目区域 */
+        .projects-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5vh;
+        }
+
+        .projects-title {
+            color: #fff;
+            font-size: clamp(1rem, 1.5vw, 1.3rem);
+            font-weight: 600;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 1vh 2vw;
+            border-radius: 2vw;
+            font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
+        }
+
+        /* 子项目网格 - 自动换行布局 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: min-content;
+            gap: 2vw;
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 1vw;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 1.5vw;
+            padding: 2vh 1.5vw;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5vh;
+            flex-shrink: 0;
+        }
+
+        .project-title {
+            font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+            font-weight: 600;
+            color: #1a1a2e;
+            flex: 1;
+            padding: 0.5vh 0.5vw;
+            border-radius: 0.5vw;
+            transition: background 0.2s;
+        }
+
+        .project-title:hover {
+            background: #f0f0f0;
+        }
+
+        /* 状态下拉选择 */
+        .status-select {
+            padding: 0.5vh 1vw;
+            border-radius: 2vw;
+            font-size: clamp(0.7rem, 1vw, 0.8rem);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .status-select.planning { background: #e3f2fd; color: #1565c0; }
+        .status-select.design { background: #f3e5f5; color: #7b1fa2; }
+        .status-select.tuning { background: #fff3e0; color: #e65100; }
+        .status-select.pilot { background: #e8f5e9; color: #2e7d32; }
+        .status-select.online { background: #d4edda; color: #155724; }
+
+        .delete-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            width: 2.5vh;
+            height: 2.5vh;
+            min-width: 22px;
+            min-height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 0.5vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .delete-btn:hover {
+            opacity: 1;
+        }
+
+        /* 可编辑区域 */
+        .editable-content {
+            background: #f8f9fa;
+            border: 1px solid transparent;
+            border-radius: 0.6vw;
+            padding: 1vh 1vw;
+            cursor: text;
+            transition: all 0.2s;
+            font-size: clamp(0.75rem, 1vw, 0.9rem);
+            line-height: 1.5;
+            min-height: 3.5vh;
+        }
+
+        .editable-content:hover {
+            border-color: #dee2e6;
+            background: #fff;
+        }
+
+        .editable-content:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .editable-content:empty:before {
+            content: attr(data-placeholder);
+            color: #adb5bd;
+        }
+
+        /* 多行文本 */
+        .editable-multiline {
+            min-height: 6vh;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 10vh;
+            overflow-y: auto;
+        }
+
+        .project-section {
+            margin-bottom: 1.2vh;
+        }
+
+        .section-label {
+            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5vh;
+            font-weight: 600;
+        }
+
+        /* 进度条 */
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5vh;
+        }
+
+        .progress-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: clamp(0.8rem, 1vw, 0.9rem);
+        }
+
+        .progress-bar {
+            height: 1vh;
+            background: #e9ecef;
+            border-radius: 0.5vh;
+            overflow: hidden;
+            margin-bottom: 1vh;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 0.5vh;
+            transition: width 0.5s ease;
+        }
+
+        /* 目标输入 - 量+人力 */
+        .goal-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1vw;
+        }
+
+        .goal-item {
+            background: #f8f9fa;
+            padding: 1vh 1vw;
+            border-radius: 0.8vw;
+        }
+
+        .goal-item .goal-label {
+            font-size: clamp(0.65rem, 0.85vw, 0.8rem);
+            color: #6c757d;
+            margin-bottom: 0.5vh;
+        }
+
+        .goal-item .editable-content {
+            background: transparent;
+            padding: 0.5vh 0;
+            min-height: 2.5vh;
+            font-weight: 500;
+        }
+
+        /* 质量指标 */
+        .quality-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1vw;
+        }
+
+        /* 卡点样式 */
+        .blocker-section .editable-content {
+            background: #fff8e1;
+            border-left: 3px solid #ff8f00;
+        }
+
+        .blocker-section .editable-content:focus {
+            background: #fff;
+        }
+
+        /* 保存按钮 */
+        .save-btn {
+            position: fixed;
+            bottom: 3vh;
+            right: 3vw;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1.5vh 2.5vw;
+            border-radius: 3vw;
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 项目类型下拉 */
+        .type-select {
+            padding: 0.5vh 1vw;
+            border-radius: 2vw;
+            font-size: clamp(0.7rem, 1vw, 0.8rem);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            margin-left: 0.5vw;
+        }
+
+        .type-select.central {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .type-select.ft {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1 contenteditable="true">2026年智能质检项目看板</h1>
+            <p class="subtitle" contenteditable="true">年度目标与分项目进展情况一览</p>
+        </div>
+
+        <!-- 总项目概览 -->
+        <div class="overview-card">
+            <div class="overview-header">
+                <div class="icon">📊</div>
+                <h2 contenteditable="true">总项目概览</h2>
+            </div>
+            <!-- 效率指标与质量指标整合布局 -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2vw;">
+                <!-- 左侧：效率指标 -->
+                <div style="background: #f8f9fa; border-radius: 1vw; padding: 1.5vh 1.5vw;">
+                    <div style="font-size: clamp(0.75rem, 1vw, 0.9rem); font-weight: 600; color: #667eea; margin-bottom: 1.5vh; display: flex; align-items: center; gap: 0.5vw;">
+                        ⚡ 效率指标
+                    </div>
+                    <div class="overview-stats" style="grid-template-columns: repeat(3, 1fr); gap: 1vw;">
+                        <!-- 中央质检项目 -->
+                        <div class="stat-item" style="background: #fff;">
+                            <div class="label" contenteditable="true">中央质检项目</div>
+                            <div class="value" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">
+                                <span id="central-confirmed">2</span><span class="sub" contenteditable="true">已确定</span>
+                            </div>
+                        </div>
+                        <!-- 日均抽检量 -->
+                        <div class="stat-item" style="background: #fff;">
+                            <div class="label" contenteditable="true">日均抽检量</div>
+                            <div class="value" id="total-orders" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">0</div>
+                        </div>
+                        <!-- 所需人力 -->
+                        <div class="stat-item" style="background: #fff;">
+                            <div class="label" contenteditable="true">所需人力</div>
+                            <div class="value" id="total-staff" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">0<span class="sub">人</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右侧：质量指标 -->
+                <div style="background: #f8f9fa; border-radius: 1vw; padding: 1.5vh 1.5vw;">
+                    <div style="font-size: clamp(0.75rem, 1vw, 0.9rem); font-weight: 600; color: #764ba2; margin-bottom: 1.5vh; display: flex; align-items: center; gap: 0.5vw;">
+                        📊 质量指标
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1vw;">
+                        <div class="goal-item" style="background: #fff; margin: 0;">
+                            <div class="goal-label" contenteditable="true">模型指标</div>
+                            <div class="editable-content" contenteditable="true" data-placeholder="点击填写..." id="overview-model-metric" style="min-height: 4vh;"></div>
+                        </div>
+                        <div class="goal-item" style="background: #fff; margin: 0;">
+                            <div class="goal-label" contenteditable="true">业务指标</div>
+                            <div class="editable-content" contenteditable="true" data-placeholder="点击填写..." id="overview-business-metric" style="min-height: 4vh;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FT项目统计 -->
+            <div style="margin-top: 1.5vh; padding-top: 1.5vh; border-top: 1px solid #e9ecef;">
+                <div style="font-size: clamp(0.7rem, 1vw, 0.85rem); font-weight: 600; color: #6c757d; margin-bottom: 1vh;">🏢 FT项目分布</div>
+                <div id="ft-stats-container" style="display: flex; flex-wrap: wrap; gap: 1vw;">
+                    <!-- FT统计动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 子项目区域 -->
+        <div class="projects-section">
+            <div class="projects-header">
+                <h3 class="projects-title" contenteditable="true">子项目详情</h3>
+                <button class="add-btn" onclick="addProject()">➕ 新增项目</button>
+            </div>
+            <div class="projects-grid" id="projects-container">
+                <!-- 项目卡片动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 保存按钮 -->
+    <button class="save-btn" onclick="saveData()">💾 保存更新</button>
+
+    <script>
+        // 状态选项
+        const statusOptions = [
+            { value: 'planning', label: '需求策划', class: 'planning' },
+            { value: 'design', label: '方案设计', class: 'design' },
+            { value: 'tuning', label: '模型调优', class: 'tuning' },
+            { value: 'pilot', label: '试点运行', class: 'pilot' },
+            { value: 'online', label: '已上线', class: 'online' }
+        ];
+
+        // FT选项
+        const ftOptions = [
+            { value: 'central', label: '中央', class: 'central' },
+            { value: 'consumer', label: '消费者', class: 'ft' },
+            { value: 'merchant', label: '商家', class: 'ft' },
+            { value: 'commercial', label: '商业化', class: 'ft' },
+            { value: 'main', label: '主站', class: 'ft' },
+            { value: 'game', label: '游戏', class: 'ft' },
+            { value: 'community', label: '社群', class: 'ft' },
+            { value: 'outbound', label: '外呼调研', class: 'ft' },
+            { value: 'security', label: '安全', class: 'ft' },
+            { value: 'life', label: '生活服务', class: 'ft' }
+        ];
+
+        // 初始数据
+        let projectsData = [
+            {
+                id: 1,
+                name: "语音质检系统升级",
+                status: "tuning",
+                type: "central",
+                orderVolume: "50000",
+                staffRatio: "2100",
+                staff: "24",
+                modelTarget: "",
+                modelActual: "",
+                businessTarget: "",
+                businessActual: "",
+                progress: 60,
+                progressDesc: "核心模块开发完成\n模型训练进行中\n预计下周联调",
+                todos: "完成模型训练，接口联调，性能优化",
+                blockers: ""
+            },
+            {
+                id: 2,
+                name: "图像质检平台",
+                status: "design",
+                type: "central",
+                orderVolume: "30000",
+                staffRatio: "2100",
+                staff: "15",
+                modelTarget: "",
+                modelActual: "",
+                businessTarget: "",
+                businessActual: "",
+                progress: 40,
+                progressDesc: "算法选型中\n数据集准备50%",
+                todos: "数据集标注，算法选型，测试用例编写",
+                blockers: "标注资源不足"
+            },
+            {
+                id: 3,
+                name: "消费者服务质检",
+                status: "pilot",
+                type: "consumer",
+                orderVolume: "25000",
+                staffRatio: "2100",
+                staff: "12",
+                modelTarget: "",
+                modelActual: "",
+                businessTarget: "",
+                businessActual: "",
+                progress: 75,
+                progressDesc: "流程引擎开发完成\n试点用户反馈收集中",
+                todos: "规则配置优化，用户培训，正式上线",
+                blockers: ""
+            }
+        ];
+
+        let nextId = 4;
+
+        // 渲染状态下拉
+        function renderStatusSelect(currentStatus, projectId) {
+            const options = statusOptions.map(opt => 
+                `<option value="${opt.value}" ${opt.value === currentStatus ? 'selected' : ''}>${opt.label}</option>`
+            ).join('');
+            
+            const currentClass = statusOptions.find(s => s.value === currentStatus)?.class || 'planning';
+            
+            return `<select class="status-select ${currentClass}" onchange="updateStatus(${projectId}, this)">${options}</select>`;
+        }
+
+        // 渲染类型下拉
+        function renderTypeSelect(currentType, projectId) {
+            const options = ftOptions.map(opt => 
+                `<option value="${opt.value}" ${opt.value === currentType ? 'selected' : ''}>${opt.label}</option>`
+            ).join('');
+            
+            const currentClass = ftOptions.find(o => o.value === currentType)?.class || 'central';
+            
+            return `<select class="type-select ${currentClass}" onchange="updateType(${projectId}, this)">${options}</select>`;
+        }
+
+        // 渲染项目卡片
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            container.innerHTML = projectsData.map(project => `
+                <div class="project-card" data-id="${project.id}">
+                    <div class="project-header">
+                        <div class="project-title" contenteditable="true" 
+                             onblur="updateProject(${project.id}, 'name', this.innerText)">${project.name}</div>
+                        <div style="display:flex;align-items:center;">
+                            ${renderStatusSelect(project.status, project.id)}
+                            ${renderTypeSelect(project.type, project.id)}
+                            <button class="delete-btn" onclick="deleteProject(${project.id})">×</button>
+                        </div>
+                    </div>
+
+                    <!-- 目标 - 量+人力 -->
+                    <div class="project-section">
+                        <div class="section-label" contenteditable="true">🎯 人效目标（量+人力）</div>
+                        <div class="goal-inputs">
+                            <div class="goal-item">
+                                <div class="goal-label" contenteditable="true">日均抽检量</div>
+                                <div class="editable-content" contenteditable="true" 
+                                     onblur="updateOrderVolume(${project.id}, this.innerText)">${project.orderVolume}</div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-label">所需人力（每<span class="editable-content" contenteditable="true" 
+                                     onblur="updateStaffRatio(${project.id}, this.innerText)" 
+                                     style="display:inline;min-height:auto;padding:2px 5px;"
+                                     id="ratio-${project.id}">${project.staffRatio || '2100'}</span>单/1人）</div>
+                                <div class="editable-content" contenteditable="true" 
+                                     onblur="updateStaff(${project.id}, this.innerText)"
+                                     id="staff-${project.id}">${project.staff}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 质量指标 -->
+                    <div class="project-section">
+                        <div class="section-label" contenteditable="true">📊 质量指标</div>
+                        <!-- 模型指标 -->
+                        <div style="background: #f8f9fa; border-radius: 0.8vw; padding: 1vh 1vw; margin-bottom: 1vh;">
+                            <div class="goal-label" style="font-weight: 600; color: #667eea; margin-bottom: 0.8vh;">模型指标</div>
+                            <div class="quality-inputs">
+                                <div class="goal-item" style="background: #fff; margin: 0;">
+                                    <div class="goal-label" contenteditable="true">预期目标</div>
+                                    <div class="editable-content" contenteditable="true" 
+                                         data-placeholder="点击填写..."
+                                         onblur="updateProject(${project.id}, 'modelTarget', this.innerText)">${project.modelTarget || ''}</div>
+                                </div>
+                                <div class="goal-item" style="background: #fff; margin: 0;">
+                                    <div class="goal-label" contenteditable="true">当前达成</div>
+                                    <div class="editable-content" contenteditable="true" 
+                                         data-placeholder="点击填写..."
+                                         onblur="updateProject(${project.id}, 'modelActual', this.innerText)">${project.modelActual || ''}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 业务指标 -->
+                        <div style="background: #f8f9fa; border-radius: 0.8vw; padding: 1vh 1vw;">
+                            <div class="goal-label" style="font-weight: 600; color: #764ba2; margin-bottom: 0.8vh;">业务指标</div>
+                            <div class="quality-inputs">
+                                <div class="goal-item" style="background: #fff; margin: 0;">
+                                    <div class="goal-label" contenteditable="true">预期目标</div>
+                                    <div class="editable-content" contenteditable="true" 
+                                         data-placeholder="点击填写..."
+                                         onblur="updateProject(${project.id}, 'businessTarget', this.innerText)">${project.businessTarget || ''}</div>
+                                </div>
+                                <div class="goal-item" style="background: #fff; margin: 0;">
+                                    <div class="goal-label" contenteditable="true">当前达成</div>
+                                    <div class="editable-content" contenteditable="true" 
+                                         data-placeholder="点击填写..."
+                                         onblur="updateProject(${project.id}, 'businessActual', this.innerText)">${project.businessActual || ''}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 进度 -->
+                    <div class="project-section">
+                        <div class="progress-header">
+                            <span class="section-label" contenteditable="true">📈 当前进展（支持换行）</span>
+                            <span class="progress-value" contenteditable="true" 
+                                  onblur="updateProgress(${project.id}, this.innerText)">${project.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${project.progress}%"></div>
+                        </div>
+                        <div class="editable-content editable-multiline" contenteditable="true" 
+                             data-placeholder="输入进展描述，按回车换行..."
+                             onblur="updateProject(${project.id}, 'progressDesc', this.innerText)">${project.progressDesc}</div>
+                    </div>
+
+                    <!-- 待办 -->
+                    <div class="project-section">
+                        <div class="section-label" contenteditable="true">✅ 待办事项</div>
+                        <div class="editable-content" contenteditable="true" 
+                             data-placeholder="添加待办事项..."
+                             onblur="updateProject(${project.id}, 'todos', this.innerText)">${project.todos}</div>
+                    </div>
+
+                    <!-- 卡点 -->
+                    <div class="project-section blocker-section">
+                        <div class="section-label" contenteditable="true">⚠️ 卡点</div>
+                        <div class="editable-content" contenteditable="true" 
+                             data-placeholder="暂无卡点..."
+                             onblur="updateProject(${project.id}, 'blockers', this.innerText)">${project.blockers}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            updateOverview();
+        }
+
+        // 更新项目数据
+        function updateProject(id, field, value) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                project[field] = value;
+            }
+        }
+
+        // 更新工单量并自动计算人力
+        function updateOrderVolume(id, value) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                const volume = parseInt(value.replace(/,/g, '')) || 0;
+                project.orderVolume = volume.toString();
+                // 自动计算人力：使用项目自定义基数，默认为2100
+                const ratio = parseInt(project.staffRatio) || 2100;
+                const staff = Math.ceil(volume / ratio);
+                project.staff = staff.toString();
+                
+                // 更新显示
+                const staffEl = document.getElementById(`staff-${id}`);
+                if (staffEl) staffEl.textContent = project.staff;
+                
+                updateOverview();
+            }
+        }
+
+        // 更新人力（手动调整）
+        function updateStaff(id, value) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                project.staff = value.replace(/[^0-9]/g, '');
+                updateOverview();
+            }
+        }
+
+        // 更新进度
+        function updateProgress(id, value) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                const num = parseInt(value.replace('%', '')) || 0;
+                project.progress = Math.min(100, Math.max(0, num));
+                renderProjects();
+            }
+        }
+
+        // 更新状态
+        function updateStatus(id, selectEl) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                project.status = selectEl.value;
+                renderProjects();
+            }
+        }
+
+        // 更新项目类型
+        function updateType(id, selectEl) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                project.type = selectEl.value;
+                updateOverview();
+                renderProjects();
+            }
+        }
+
+        // 更新人力计算基数
+        function updateStaffRatio(id, value) {
+            const project = projectsData.find(p => p.id === id);
+            if (project) {
+                const ratio = parseInt(value) || 2100;
+                project.staffRatio = ratio.toString();
+                // 重新计算人力
+                const volume = parseInt(project.orderVolume) || 0;
+                project.staff = Math.ceil(volume / ratio).toString();
+                
+                // 更新显示
+                const staffEl = document.getElementById(`staff-${id}`);
+                if (staffEl) staffEl.textContent = project.staff;
+                
+                updateOverview();
+            }
+        }
+
+        // 更新总览统计
+        function updateOverview() {
+            // 统计中央项目
+            const centralProjects = projectsData.filter(p => p.type === 'central');
+            document.getElementById('central-confirmed').textContent = centralProjects.length;
+            
+            // 计算总工单量
+            const totalOrders = projectsData.reduce((sum, p) => sum + (parseInt(p.orderVolume) || 0), 0);
+            document.getElementById('total-orders').textContent = totalOrders.toLocaleString();
+            
+            // 计算总人力（子项目人力之和）
+            const totalStaff = projectsData.reduce((sum, p) => sum + (parseInt(p.staff) || 0), 0);
+            document.getElementById('total-staff').innerHTML = `${totalStaff}<span class="sub">人</span>`;
+            
+            // 统计各FT项目分布
+            renderFTStats();
+        }
+
+        // 渲染FT项目统计
+        function renderFTStats() {
+            const container = document.getElementById('ft-stats-container');
+            if (!container) return;
+            
+            // 统计每个FT的项目数（排除中央）
+            const ftStats = {};
+            ftOptions.forEach(opt => {
+                if (opt.value !== 'central') {
+                    ftStats[opt.value] = projectsData.filter(p => p.type === opt.value).length;
+                }
+            });
+            
+            // 只显示有项目的FT
+            const activeFTs = Object.entries(ftStats).filter(([_, count]) => count > 0);
+            
+            if (activeFTs.length === 0) {
+                container.innerHTML = '<span style="color: #adb5bd; font-size: 0.85rem;">暂无FT项目</span>';
+                return;
+            }
+            
+            container.innerHTML = activeFTs.map(([ftValue, count]) => {
+                const ftLabel = ftOptions.find(o => o.value === ftValue)?.label || ftValue;
+                return `
+                    <div style="background: #fce4ec; color: #c2185b; padding: 0.5vh 1vw; border-radius: 1vw; font-size: clamp(0.7rem, 0.9vw, 0.85rem); font-weight: 500; display: flex; align-items: center; gap: 0.5vw;">
+                        ${ftLabel}: ${count}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 新增项目
+        function addProject() {
+            if (projectsData.length >= 6) {
+                alert('最多支持6个子项目');
+                return;
+            }
+            
+            const newProject = {
+                id: nextId++,
+                name: "新建项目",
+                status: "planning",
+                type: "consumer",
+                orderVolume: "0",
+                staffRatio: "2100",
+                staff: "0",
+                modelTarget: "",
+                modelActual: "",
+                businessTarget: "",
+                businessActual: "",
+                progress: 0,
+                progressDesc: "",
+                todos: "",
+                blockers: ""
+            };
+            
+            projectsData.push(newProject);
+            renderProjects();
+        }
+
+        // 删除项目
+        function deleteProject(id) {
+            if (confirm('确定删除此项目吗？')) {
+                projectsData = projectsData.filter(p => p.id !== id);
+                renderProjects();
+            }
+        }
+
+        // 保存数据
+        function saveData() {
+            // 保存项目数据
+            localStorage.setItem('qualityProjects', JSON.stringify(projectsData));
+            
+            // 保存总项目质量指标
+            const modelMetric = document.getElementById('overview-model-metric')?.innerText || '';
+            const businessMetric = document.getElementById('overview-business-metric')?.innerText || '';
+            localStorage.setItem('qualityOverviewMetrics', JSON.stringify({
+                modelMetric: modelMetric,
+                businessMetric: businessMetric
+            }));
+            
+            const btn = document.querySelector('.save-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ 已保存';
+            btn.style.background = '#28a745';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }
+
+        // 加载数据
+        function loadData() {
+            // 加载项目数据
+            const saved = localStorage.getItem('qualityProjects');
+            if (saved) {
+                const loaded = JSON.parse(saved);
+                if (loaded.length > 0) {
+                    projectsData = loaded;
+                    nextId = Math.max(...projectsData.map(p => p.id)) + 1;
+                }
+            }
+            
+            // 加载总项目质量指标
+            const savedMetrics = localStorage.getItem('qualityOverviewMetrics');
+            if (savedMetrics) {
+                const metrics = JSON.parse(savedMetrics);
+                const modelEl = document.getElementById('overview-model-metric');
+                const businessEl = document.getElementById('overview-business-metric');
+                if (modelEl && metrics.modelMetric) modelEl.innerText = metrics.modelMetric;
+                if (businessEl && metrics.businessMetric) businessEl.innerText = metrics.businessMetric;
+            }
+        }
+
+        // 初始化
+        loadData();
+        renderProjects();
+    </script>
+</body>
+</html>
