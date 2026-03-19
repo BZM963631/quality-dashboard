@@ -20,15 +20,12 @@
             overflow-x: hidden;
         }
 
-        /* 铺满全屏 */
+        /* 统一滚动布局 */
         .container {
             width: 100%;
-            max-width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 2vh 3vw;
-            overflow: hidden;
             box-sizing: border-box;
         }
 
@@ -167,10 +164,7 @@
             grid-template-columns: repeat(3, 1fr);
             grid-auto-rows: min-content;
             gap: 2vw;
-            flex: 1;
-            min-height: 0;
-            overflow-y: auto;
-            padding-right: 1vw;
+            margin-top: 1.5vh;
         }
 
         .project-card {
@@ -442,22 +436,29 @@
                         ⚡ 效率指标
                     </div>
                     <div class="overview-stats" style="grid-template-columns: repeat(3, 1fr); gap: 1vw;">
-                        <!-- 中央质检项目 -->
+                        <!-- 项目数量 -->
                         <div class="stat-item" style="background: #fff;">
-                            <div class="label" contenteditable="true">中央质检项目</div>
-                            <div class="value" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">
-                                <span id="central-confirmed">2</span><span class="sub" contenteditable="true">已确定</span>
+                            <div class="label" contenteditable="true">项目数量</div>
+                            <div class="value" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem);">
+                                <div style="color: #ffc107;">未上线: <span id="offline-count">0</span></div>
+                                <div style="color: #28a745;">已上线: <span id="online-count">0</span></div>
                             </div>
                         </div>
                         <!-- 日均抽检量 -->
                         <div class="stat-item" style="background: #fff;">
                             <div class="label" contenteditable="true">日均抽检量</div>
-                            <div class="value" id="total-orders" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">0</div>
+                            <div class="value" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem);">
+                                <div>规划: <span id="total-plan-orders">0</span></div>
+                                <div style="color: #28a745;">达成: <span id="total-actual-orders">0</span></div>
+                            </div>
                         </div>
                         <!-- 所需人力 -->
                         <div class="stat-item" style="background: #fff;">
                             <div class="label" contenteditable="true">所需人力</div>
-                            <div class="value" id="total-staff" style="font-size: clamp(0.9rem, 1.5vw, 1.3rem);">0<span class="sub">人</span></div>
+                            <div class="value" style="font-size: clamp(0.8rem, 1.2vw, 1.1rem);">
+                                <div>规划: <span id="total-plan-staff">0</span>人</div>
+                                <div style="color: #28a745;">达成: <span id="total-actual-staff">0</span>人</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -478,11 +479,32 @@
                     </div>
                 </div>
             </div>
-            <!-- FT项目统计 -->
+            <!-- 项目状态统计 -->
             <div style="margin-top: 1.5vh; padding-top: 1.5vh; border-top: 1px solid #e9ecef;">
-                <div style="font-size: clamp(0.7rem, 1vw, 0.85rem); font-weight: 600; color: #6c757d; margin-bottom: 1vh;">🏢 FT项目分布</div>
-                <div id="ft-stats-container" style="display: flex; flex-wrap: wrap; gap: 1vw;">
-                    <!-- FT统计动态生成 -->
+                <div style="font-size: clamp(0.7rem, 1vw, 0.85rem); font-weight: 600; color: #6c757d; margin-bottom: 1vh;">📊 项目状态汇总</div>
+                <!-- 总体统计 -->
+                <div style="display: flex; flex-wrap: wrap; gap: 1vw; margin-bottom: 1vh;">
+                    <div style="background: #fff3cd; color: #856404; padding: 0.5vh 1vw; border-radius: 1vw; font-size: clamp(0.7rem, 0.9vw, 0.85rem); font-weight: 500;">
+                        📋 未上线: <span id="offline-count-2">0</span>个
+                    </div>
+                    <div style="background: #d4edda; color: #155724; padding: 0.5vh 1vw; border-radius: 1vw; font-size: clamp(0.7rem, 0.9vw, 0.85rem); font-weight: 500;">
+                        ✅ 已上线: <span id="online-count-2">0</span>个
+                    </div>
+                </div>
+                <!-- 中央项目 -->
+                <div style="background: #e3f2fd; border-radius: 1vw; padding: 1vh 1vw; margin-bottom: 1vh;">
+                    <div style="font-size: clamp(0.65rem, 0.8vw, 0.75rem); font-weight: 600; color: #1565c0; margin-bottom: 0.5vh;">🏢 中央项目</div>
+                    <div style="display: flex; gap: 1vw;">
+                        <span style="font-size: clamp(0.65rem, 0.8vw, 0.75rem);">未上线: <span id="central-offline">0</span>个</span>
+                        <span style="font-size: clamp(0.65rem, 0.8vw, 0.75rem);">已上线: <span id="central-online">0</span>个</span>
+                    </div>
+                </div>
+                <!-- FT项目分布 -->
+                <div style="background: #fce4ec; border-radius: 1vw; padding: 1vh 1vw;">
+                    <div style="font-size: clamp(0.65rem, 0.8vw, 0.75rem); font-weight: 600; color: #c2185b; margin-bottom: 0.5vh;">🏷️ FT项目分布</div>
+                    <div id="ft-stats-container" style="display: flex; flex-wrap: wrap; gap: 0.8vw;">
+                        <!-- FT统计动态生成 -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -537,9 +559,10 @@
                 name: "语音质检系统升级",
                 status: "tuning",
                 type: "central",
-                orderVolume: "50000",
-                staffRatio: "2100",
-                staff: "24",
+                planOrderVolume: "50000",
+                actualOrderVolume: "",
+                planStaff: "24",
+                actualStaff: "",
                 modelTarget: "",
                 modelActual: "",
                 businessTarget: "",
@@ -554,9 +577,10 @@
                 name: "图像质检平台",
                 status: "design",
                 type: "central",
-                orderVolume: "30000",
-                staffRatio: "2100",
-                staff: "15",
+                planOrderVolume: "30000",
+                actualOrderVolume: "",
+                planStaff: "15",
+                actualStaff: "",
                 modelTarget: "",
                 modelActual: "",
                 businessTarget: "",
@@ -569,18 +593,19 @@
             {
                 id: 3,
                 name: "消费者服务质检",
-                status: "pilot",
+                status: "online",
                 type: "consumer",
-                orderVolume: "25000",
-                staffRatio: "2100",
-                staff: "12",
+                planOrderVolume: "25000",
+                actualOrderVolume: "22000",
+                planStaff: "12",
+                actualStaff: "11",
                 modelTarget: "",
                 modelActual: "",
                 businessTarget: "",
                 businessActual: "",
-                progress: 75,
-                progressDesc: "流程引擎开发完成\n试点用户反馈收集中",
-                todos: "规则配置优化，用户培训，正式上线",
+                progress: 100,
+                progressDesc: "已上线运行\n日均处理22000单",
+                todos: "持续优化，监控告警",
                 blockers: ""
             }
         ];
@@ -624,23 +649,29 @@
                         </div>
                     </div>
 
-                    <!-- 目标 - 量+人力 -->
+                    <!-- 人效目标 - 规划与实际 -->
                     <div class="project-section">
-                        <div class="section-label" contenteditable="true">🎯 人效目标（量+人力）</div>
-                        <div class="goal-inputs">
+                        <div class="section-label" contenteditable="true">🎯 人效目标</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1vw;">
                             <div class="goal-item">
-                                <div class="goal-label" contenteditable="true">日均抽检量</div>
+                                <div class="goal-label" contenteditable="true">规划日均抽检量</div>
                                 <div class="editable-content" contenteditable="true" 
-                                     onblur="updateOrderVolume(${project.id}, this.innerText)">${project.orderVolume}</div>
+                                     onblur="updateProject(${project.id}, 'planOrderVolume', this.innerText)">${project.planOrderVolume || ''}</div>
                             </div>
                             <div class="goal-item">
-                                <div class="goal-label">所需人力（每<span class="editable-content" contenteditable="true" 
-                                     onblur="updateStaffRatio(${project.id}, this.innerText)" 
-                                     style="display:inline;min-height:auto;padding:2px 5px;"
-                                     id="ratio-${project.id}">${project.staffRatio || '2100'}</span>单/1人）</div>
+                                <div class="goal-label" contenteditable="true">实际达成</div>
                                 <div class="editable-content" contenteditable="true" 
-                                     onblur="updateStaff(${project.id}, this.innerText)"
-                                     id="staff-${project.id}">${project.staff}</div>
+                                     onblur="updateProject(${project.id}, 'actualOrderVolume', this.innerText)">${project.actualOrderVolume || ''}</div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-label" contenteditable="true">规划所需人力</div>
+                                <div class="editable-content" contenteditable="true" 
+                                     onblur="updateProject(${project.id}, 'planStaff', this.innerText)">${project.planStaff || ''}</div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-label" contenteditable="true">实际达成</div>
+                                <div class="editable-content" contenteditable="true" 
+                                     onblur="updateProject(${project.id}, 'actualStaff', this.innerText)">${project.actualStaff || ''}</div>
                             </div>
                         </div>
                     </div>
@@ -730,34 +761,6 @@
             }
         }
 
-        // 更新工单量并自动计算人力
-        function updateOrderVolume(id, value) {
-            const project = projectsData.find(p => p.id === id);
-            if (project) {
-                const volume = parseInt(value.replace(/,/g, '')) || 0;
-                project.orderVolume = volume.toString();
-                // 自动计算人力：使用项目自定义基数，默认为2100
-                const ratio = parseInt(project.staffRatio) || 2100;
-                const staff = Math.ceil(volume / ratio);
-                project.staff = staff.toString();
-                
-                // 更新显示
-                const staffEl = document.getElementById(`staff-${id}`);
-                if (staffEl) staffEl.textContent = project.staff;
-                
-                updateOverview();
-            }
-        }
-
-        // 更新人力（手动调整）
-        function updateStaff(id, value) {
-            const project = projectsData.find(p => p.id === id);
-            if (project) {
-                project.staff = value.replace(/[^0-9]/g, '');
-                updateOverview();
-            }
-        }
-
         // 更新进度
         function updateProgress(id, value) {
             const project = projectsData.find(p => p.id === id);
@@ -807,19 +810,39 @@
 
         // 更新总览统计
         function updateOverview() {
-            // 统计中央项目
+            // 统计未上线/已上线项目数量
+            const offlineProjects = projectsData.filter(p => p.status !== 'online');
+            const onlineProjects = projectsData.filter(p => p.status === 'online');
+            
+            document.getElementById('offline-count').textContent = offlineProjects.length;
+            document.getElementById('online-count').textContent = onlineProjects.length;
+            document.getElementById('offline-count-2').textContent = offlineProjects.length;
+            document.getElementById('online-count-2').textContent = onlineProjects.length;
+            
+            // 计算规划日均抽检量（所有项目）
+            const totalPlanOrders = projectsData.reduce((sum, p) => sum + (parseInt(p.planOrderVolume) || 0), 0);
+            document.getElementById('total-plan-orders').textContent = totalPlanOrders.toLocaleString();
+            
+            // 计算实际上线达成值（只有已上线项目）
+            const totalActualOrders = onlineProjects.reduce((sum, p) => sum + (parseInt(p.actualOrderVolume) || 0), 0);
+            document.getElementById('total-actual-orders').textContent = totalActualOrders.toLocaleString();
+            
+            // 计算规划人力（所有项目）
+            const totalPlanStaff = projectsData.reduce((sum, p) => sum + (parseInt(p.planStaff) || 0), 0);
+            document.getElementById('total-plan-staff').textContent = totalPlanStaff;
+            
+            // 计算实际达成效率（只有已上线项目）
+            const totalActualStaff = onlineProjects.reduce((sum, p) => sum + (parseInt(p.actualStaff) || 0), 0);
+            document.getElementById('total-actual-staff').textContent = totalActualStaff;
+            
+            // 中央项目统计
             const centralProjects = projectsData.filter(p => p.type === 'central');
-            document.getElementById('central-confirmed').textContent = centralProjects.length;
+            const centralOffline = centralProjects.filter(p => p.status !== 'online').length;
+            const centralOnline = centralProjects.filter(p => p.status === 'online').length;
+            document.getElementById('central-offline').textContent = centralOffline;
+            document.getElementById('central-online').textContent = centralOnline;
             
-            // 计算总工单量
-            const totalOrders = projectsData.reduce((sum, p) => sum + (parseInt(p.orderVolume) || 0), 0);
-            document.getElementById('total-orders').textContent = totalOrders.toLocaleString();
-            
-            // 计算总人力（子项目人力之和）
-            const totalStaff = projectsData.reduce((sum, p) => sum + (parseInt(p.staff) || 0), 0);
-            document.getElementById('total-staff').innerHTML = `${totalStaff}<span class="sub">人</span>`;
-            
-            // 统计各FT项目分布
+            // FT项目统计（按FT名称）
             renderFTStats();
         }
 
@@ -832,26 +855,31 @@
             const ftStats = {};
             ftOptions.forEach(opt => {
                 if (opt.value !== 'central') {
-                    ftStats[opt.value] = projectsData.filter(p => p.type === opt.value).length;
+                    const ftProjects = projectsData.filter(p => p.type === opt.value);
+                    if (ftProjects.length > 0) {
+                        ftStats[opt.value] = {
+                            label: opt.label,
+                            offline: ftProjects.filter(p => p.status !== 'online').length,
+                            online: ftProjects.filter(p => p.status === 'online').length
+                        };
+                    }
                 }
             });
             
-            // 只显示有项目的FT
-            const activeFTs = Object.entries(ftStats).filter(([_, count]) => count > 0);
-            
-            if (activeFTs.length === 0) {
-                container.innerHTML = '<span style="color: #adb5bd; font-size: 0.85rem;">暂无FT项目</span>';
+            // 生成FT统计HTML
+            const ftEntries = Object.entries(ftStats);
+            if (ftEntries.length === 0) {
+                container.innerHTML = '<span style="color: #adb5bd; font-size: 0.75rem;">暂无FT项目</span>';
                 return;
             }
             
-            container.innerHTML = activeFTs.map(([ftValue, count]) => {
-                const ftLabel = ftOptions.find(o => o.value === ftValue)?.label || ftValue;
-                return `
-                    <div style="background: #fce4ec; color: #c2185b; padding: 0.5vh 1vw; border-radius: 1vw; font-size: clamp(0.7rem, 0.9vw, 0.85rem); font-weight: 500; display: flex; align-items: center; gap: 0.5vw;">
-                        ${ftLabel}: ${count}
-                    </div>
-                `;
-            }).join('');
+            container.innerHTML = ftEntries.map(([ftValue, stats]) => `
+                <div style="background: #fff; padding: 0.4vh 0.8vw; border-radius: 0.8vw; font-size: clamp(0.6rem, 0.75vw, 0.7rem);">
+                    <span style="font-weight: 600;">${stats.label}</span>:
+                    <span style="color: #856404;">未上线${stats.offline}</span> /
+                    <span style="color: #155724;">已上线${stats.online}</span>
+                </div>
+            `).join('');
         }
 
         // 新增项目
@@ -866,9 +894,10 @@
                 name: "新建项目",
                 status: "planning",
                 type: "consumer",
-                orderVolume: "0",
-                staffRatio: "2100",
-                staff: "0",
+                planOrderVolume: "",
+                actualOrderVolume: "",
+                planStaff: "",
+                actualStaff: "",
                 modelTarget: "",
                 modelActual: "",
                 businessTarget: "",
