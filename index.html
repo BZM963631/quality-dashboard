@@ -935,20 +935,19 @@
             btn.style.background = '#ffc107';
             
             try {
-                // 检查Token
+                // 检查Token - 从localStorage获取或使用默认值
                 if (!GIST_TOKEN) {
-                    const token = prompt('请输入GitHub Token以保存数据：');
-                    if (!token) {
+                    GIST_TOKEN = localStorage.getItem('gist_token') || '';
+                    if (!GIST_TOKEN) {
+                        alert('请先在浏览器控制台输入Token: localStorage.setItem("gist_token", "你的Token")');
                         btn.innerHTML = '❌ 需要Token';
                         btn.style.background = '#dc3545';
                         setTimeout(() => {
                             btn.innerHTML = originalText;
                             btn.style.background = '';
-                        }, 2000);
+                        }, 3000);
                         return;
                     }
-                    GIST_TOKEN = token;
-                    localStorage.setItem('gist_token', token);
                 }
                 
                 // 准备数据
@@ -984,7 +983,9 @@
                     btn.innerHTML = '✅ 已保存到云端';
                     btn.style.background = '#28a745';
                 } else {
-                    throw new Error('保存失败');
+                    const errorText = await response.text();
+                    console.error('API Error:', errorText);
+                    throw new Error('保存失败: ' + response.status);
                 }
             } catch (error) {
                 console.error('Save error:', error);
