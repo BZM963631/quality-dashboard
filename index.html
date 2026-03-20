@@ -524,11 +524,24 @@
 
     <!-- 保存按钮 -->
     <button class="save-btn" onclick="saveData()">💾 保存更新</button>
+    
+    <!-- Token设置按钮 -->
+    <button class="save-btn" style="right: 180px; background: linear-gradient(135deg, #17a2b8, #138496);" onclick="setToken()">🔑 设置Token</button>
 
     <script>
         // ========== Gist 配置 ==========
         const GIST_ID = '0a6767c06ba1ead0ca0e18026ca5bd7c';
         let GIST_TOKEN = ''; // Token将在页面加载时通过输入获取
+
+        // 设置Token
+        function setToken() {
+            const token = window.prompt('请输入GitHub Gist Token：');
+            if (token) {
+                GIST_TOKEN = token;
+                localStorage.setItem('gist_token', token);
+                alert('Token已保存！');
+            }
+        }
 
         // 状态选项
         const statusOptions = [
