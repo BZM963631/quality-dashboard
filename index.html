@@ -250,13 +250,13 @@
         .editable-content {
             background: #f8f9fa;
             border: 1px solid transparent;
-            border-radius: 0.6vw;
-            padding: 1vh 1vw;
+            border-radius: 6px;
+            padding: 8px 10px;
             cursor: text;
             transition: all 0.2s;
-            font-size: clamp(0.75rem, 1vw, 0.9rem);
+            font-size: 0.85rem;
             line-height: 1.5;
-            min-height: 3.5vh;
+            min-height: 32px;
         }
 
         .editable-content:hover {
@@ -278,23 +278,23 @@
 
         /* 多行文本 */
         .editable-multiline {
-            min-height: 6vh;
+            min-height: 60px;
             white-space: pre-wrap;
             word-break: break-word;
-            max-height: 10vh;
+            max-height: 100px;
             overflow-y: auto;
         }
 
         .project-section {
-            margin-bottom: 1.2vh;
+            margin-bottom: 12px;
         }
 
         .section-label {
-            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            font-size: 0.75rem;
             color: #6c757d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 0.5vh;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
@@ -302,61 +302,62 @@
         .progress-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5vh;
+            margin-bottom: 6px;
         }
 
         .progress-value {
             font-weight: 600;
             color: #667eea;
-            font-size: clamp(0.8rem, 1vw, 0.9rem);
+            font-size: 0.85rem;
         }
 
         .progress-bar {
-            height: 1vh;
+            height: 8px;
             background: #e9ecef;
-            border-radius: 0.5vh;
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 1vh;
+            margin-bottom: 8px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 0.5vh;
+            border-radius: 4px;
             transition: width 0.5s ease;
         }
 
-        /* 目标输入 - 量+人力 */
+        /* 目标输入 - 统一样式 */
         .goal-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1vw;
+            gap: 10px;
         }
 
         .goal-item {
             background: #f8f9fa;
-            padding: 1vh 1vw;
-            border-radius: 0.8vw;
+            padding: 10px 12px;
+            border-radius: 8px;
         }
 
         .goal-item .goal-label {
-            font-size: clamp(0.65rem, 0.85vw, 0.8rem);
+            font-size: 0.75rem;
             color: #6c757d;
-            margin-bottom: 0.5vh;
+            margin-bottom: 6px;
         }
 
         .goal-item .editable-content {
             background: transparent;
-            padding: 0.5vh 0;
-            min-height: 2.5vh;
+            padding: 4px 0;
+            min-height: 24px;
             font-weight: 500;
+            font-size: 0.85rem;
         }
 
         /* 质量指标 */
         .quality-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1vw;
+            gap: 10px;
         }
 
         /* 卡点样式 */
@@ -639,13 +640,19 @@
             const container = document.getElementById('projects-container');
             container.innerHTML = projectsData.map(project => `
                 <div class="project-card" data-id="${project.id}">
-                    <div class="project-header">
-                        <div class="project-title" contenteditable="true" 
+                    <div class="project-header" style="flex-direction:column;align-items:flex-start;gap:1vh;">
+                        <div class="project-title" contenteditable="true" style="width:100%;font-size:1rem;font-weight:600;" 
                              onblur="updateProject(${project.id}, 'name', this.innerText)">${project.name}</div>
-                        <div style="display:flex;align-items:center;">
-                            ${renderStatusSelect(project.status, project.id)}
-                            ${renderTypeSelect(project.type, project.id)}
-                            <button class="delete-btn" onclick="deleteProject(${project.id})">×</button>
+                        <div style="display:flex;align-items:center;gap:2vw;width:100%;">
+                            <div style="display:flex;align-items:center;gap:0.4vw;">
+                                <span style="font-size:0.7rem;color:#6c757d;">项目状态</span>
+                                ${renderStatusSelect(project.status, project.id)}
+                            </div>
+                            <div style="display:flex;align-items:center;gap:0.4vw;">
+                                <span style="font-size:0.7rem;color:#6c757d;">项目归属</span>
+                                ${renderTypeSelect(project.type, project.id)}
+                            </div>
+                            <button class="delete-btn" style="margin-left:auto;" onclick="deleteProject(${project.id})">×</button>
                         </div>
                     </div>
 
@@ -681,7 +688,7 @@
                         <div class="section-label" contenteditable="true">📊 质量指标</div>
                         <!-- 模型指标 -->
                         <div style="background: #f8f9fa; border-radius: 0.8vw; padding: 1vh 1vw; margin-bottom: 1vh;">
-                            <div class="goal-label" style="font-weight: 600; color: #667eea; margin-bottom: 0.8vh;">模型指标</div>
+                            <div class="goal-label" style="font-size: 0.75rem; font-weight: 600; color: #667eea; margin-bottom: 6px;">模型指标</div>
                             <div class="quality-inputs">
                                 <div class="goal-item" style="background: #fff; margin: 0;">
                                     <div class="goal-label" contenteditable="true">预期目标</div>
@@ -699,7 +706,7 @@
                         </div>
                         <!-- 业务指标 -->
                         <div style="background: #f8f9fa; border-radius: 0.8vw; padding: 1vh 1vw;">
-                            <div class="goal-label" style="font-weight: 600; color: #764ba2; margin-bottom: 0.8vh;">业务指标</div>
+                            <div class="goal-label" style="font-size: 0.75rem; font-weight: 600; color: #764ba2; margin-bottom: 6px;">业务指标</div>
                             <div class="quality-inputs">
                                 <div class="goal-item" style="background: #fff; margin: 0;">
                                     <div class="goal-label" contenteditable="true">预期目标</div>
