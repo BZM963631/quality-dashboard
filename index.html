@@ -164,10 +164,10 @@
             box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
         }
 
-        /* 子项目网格 - 自动换行布局 */
+        /* 子项目网格 - 响应式自适应布局 */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             grid-auto-rows: min-content;
             gap: 2vw;
             margin-top: 1.5vh;
@@ -590,6 +590,7 @@
                 businessActual: "",
                 progress: 60,
                 progressDesc: "核心模块开发完成\n模型训练进行中\n预计下周联调",
+                expectedOnlineDate: "2026-04-15",
                 todos: "完成模型训练，接口联调，性能优化",
                 blockers: ""
             },
@@ -608,6 +609,7 @@
                 businessActual: "",
                 progress: 40,
                 progressDesc: "算法选型中\n数据集准备50%",
+                expectedOnlineDate: "2026-05-01",
                 todos: "数据集标注，算法选型，测试用例编写",
                 blockers: "标注资源不足"
             },
@@ -626,6 +628,7 @@
                 businessActual: "",
                 progress: 100,
                 progressDesc: "已上线运行\n日均处理22000单",
+                expectedOnlineDate: "",
                 todos: "持续优化，监控告警",
                 blockers: ""
             }
@@ -747,12 +750,20 @@
                     <!-- 进度 -->
                     <div class="project-section">
                         <div class="progress-header">
-                            <span class="section-label" contenteditable="true">📈 当前进展（支持换行）</span>
+                            <span class="section-label" contenteditable="true">📈 当前进展</span>
                             <span class="progress-value" contenteditable="true" 
                                   onblur="updateProgress(${project.id}, this.innerText)">${project.progress}%</span>
                         </div>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${project.progress}%"></div>
+                        </div>
+                        <!-- 预期上线时间 -->
+                        <div style="display: flex; align-items: center; gap: 0.5vw; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; color: #6c757d;">🎯 预期上线:</span>
+                            <input type="date" 
+                                   style="border: 1px solid #dee2e6; border-radius: 4px; padding: 4px 8px; font-size: 0.8rem;"
+                                   value="${project.expectedOnlineDate || ''}"
+                                   onchange="updateProject(${project.id}, 'expectedOnlineDate', this.value)">
                         </div>
                         <div class="editable-content editable-multiline" contenteditable="true" 
                              data-placeholder="输入进展描述，按回车换行..."
@@ -941,6 +952,7 @@
                 businessActual: "",
                 progress: 0,
                 progressDesc: "",
+                expectedOnlineDate: "",
                 todos: "",
                 blockers: ""
             };
