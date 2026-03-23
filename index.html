@@ -1016,9 +1016,10 @@
                         // 同时保存到localStorage作为备份
                         localStorage.setItem('qualityProjects', JSON.stringify(projectsData));
                         localStorage.setItem('lastUpdateTime', new Date().toISOString());
+                        localStorage.setItem('qualityOverviewMetrics', JSON.stringify(overviewMetrics));
                         btn.innerHTML = '✅ 已保存到云端';
                         btn.style.background = '#28a745';
-                        updateLastUpdateTime();
+                        updateLastSavedTime();
                         return;
                     }
                 }
@@ -1026,9 +1027,10 @@
                 // API失败或无Token，降级到localStorage
                 localStorage.setItem('qualityProjects', JSON.stringify(projectsData));
                 localStorage.setItem('lastUpdateTime', new Date().toISOString());
+                localStorage.setItem('qualityOverviewMetrics', JSON.stringify(overviewMetrics));
                 btn.innerHTML = '✅ 已保存到本地';
                 btn.style.background = '#17a2b8';
-                updateLastUpdateTime();
+                updateLastSavedTime();
                 
             } catch (error) {
                 console.error('Save error:', error);
@@ -1036,6 +1038,7 @@
                 try {
                     localStorage.setItem('qualityProjects', JSON.stringify(projectsData));
                     localStorage.setItem('lastUpdateTime', new Date().toISOString());
+                    localStorage.setItem('qualityOverviewMetrics', JSON.stringify(overviewMetrics));
                     btn.innerHTML = '✅ 已保存到本地';
                     btn.style.background = '#17a2b8';
                     updateLastUpdateTime();
